@@ -1,11 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm'
 
-export default class CreateCustomers1593820421594
-  implements MigrationInterface {
+export default class CreateOrders1593953626925 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'customers',
+        name: 'orders',
         columns: [
           {
             name: 'id',
@@ -15,13 +14,8 @@ export default class CreateCustomers1593820421594
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'name',
-            type: 'varchar',
-          },
-          {
-            name: 'email',
-            type: 'varchar',
-            isUnique: true,
+            name: 'customer_id',
+            type: 'uuid',
           },
           {
             name: 'created_at',
@@ -34,11 +28,21 @@ export default class CreateCustomers1593820421594
             default: 'now()',
           },
         ],
+        foreignKeys: [
+          {
+            name: 'Costumer',
+            referencedTableName: 'customers',
+            referencedColumnNames: ['id'],
+            columnNames: ['customer_id'],
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE',
+          },
+        ],
       }),
     )
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('customers')
+    await queryRunner.dropTable('orders')
   }
 }
